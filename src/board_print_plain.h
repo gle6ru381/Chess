@@ -1,3 +1,4 @@
+#pragma once
 #include "board.h"
 #define SIZE 8
 

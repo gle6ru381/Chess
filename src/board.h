@@ -1,9 +1,9 @@
 #include <stdio.h>
 #pragma once
 
-enum Size { empty, white, black };
+typedef enum { empty, white, black } Size;
 
 typedef struct {
     char name;
-    enum Size size;
+    Size size;
 } Figure;
