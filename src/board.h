@@ -3,11 +3,10 @@
 #include <stdio.h>
 #define SIZE 8
 
-typedef enum { no = 0, p, r, h, e, q, k } Name;
 typedef enum { empty, white, black } Side;
 
 typedef struct {
-    Name name;
+    char name;
     Side side;
     bool first_move;
 } Figure;
