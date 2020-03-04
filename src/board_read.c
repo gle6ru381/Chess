@@ -22,5 +22,6 @@ Map board_read()
     }
     string_push_back(second, '\0');
 
+    string_free(buff);
     return map;
 }
