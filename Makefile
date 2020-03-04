@@ -1,9 +1,10 @@
 .PHONY: clean
+FLAGS=-Wall -Werror
 bin/chess: $(patsubst src/%.c,build/%.o,$(wildcard src/*.c))
-	gcc $^ -o $@ 
+	gcc $^ $(FLAGS) -o $@ 
 
 build/%.o: src/%.c
-	gcc -o $@ -c -MD $<
+	gcc -o $@ $(FLAGS) -c -MD $<
 
 clean:
 	rm build/*.o
