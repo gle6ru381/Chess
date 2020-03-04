@@ -1,4 +1,6 @@
+#include "board.h"
 #include "board_print_plain.h"
+#include "board_read.h"
 
 int main()
 {
@@ -41,6 +43,12 @@ int main()
             board[i][j].side = empty;
         }
     }
+
+    Map map = board_read();
+
+    printf("%s-%s\n", map.first->str, map.second->str);
+
+    map_free(map);
 
     board_print(board);
     return 0;
