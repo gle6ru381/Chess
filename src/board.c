@@ -36,18 +36,11 @@ String* string_copy(const String* string)
 int string_push_back(String* str, char c)
 {
     if (str->size == str->capacity) {
-        String* temp = string_copy(str);
-        if (temp == NULL)
-            return -1;
-        string_free(str);
-        *str = *string_new(temp->capacity * 2);
-        if (str == NULL)
-            return -1;
-        memcpy(str->str, temp->str, temp->size * sizeof(char));
-        str->size = temp->size;
-        string_free(temp);
+        str->str = realloc(str->str, (str->capacity * 2) * sizeof(char));
+        str->capacity *= 2;
     }
 
-    str->str[str->size++] = c;
+    str->str[str->size] = c;
+    str->size++;
     return 0;
 }

@@ -2,9 +2,9 @@
 
 Map board_read()
 {
-    Map map = {string_new(5), string_new(5)};
-    String* first = map.first;
-    String* second = map.second;
+    Map map;
+    String* first = string_new(5);
+    String* second = string_new(5);
     String* buff = string_new(10);
     char c;
     while ((c = getchar()) != '\n') {
@@ -21,6 +21,9 @@ Map board_read()
         string_push_back(second, buff->str[i]);
     }
     string_push_back(second, '\0');
+
+    map.first = first;
+    map.second = second;
 
     string_free(buff);
     return map;
