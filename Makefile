@@ -1,5 +1,5 @@
 .PHONY: clean
-FLAGS=-Wall -Werror
+FLAGS=-Wall -Werror -g3
 bin/chess: $(patsubst src/%.c,build/%.o,$(wildcard src/*.c))
 	gcc $^ $(FLAGS) -o $@ 
 
