@@ -1,15 +1,21 @@
 #include "board.h"
 
-void map_free(Map map)
+void pair_free(Pair pair)
 {
-    string_free(map.first);
-    string_free(map.second);
+    string_free(pair.first);
+    string_free(pair.second);
 }
 
 String* string_new(size_t size)
 {
     String* string = (String*)(malloc(sizeof(String)));
+    if (string == NULL)
+        return NULL;
     string->str = (char*)(calloc(size, sizeof(char)));
+    if (string->str == NULL) {
+        free(string);
+        return NULL;
+    }
     string->capacity = size;
     string->size = 0;
     return string;
@@ -33,21 +39,26 @@ String* string_copy(const String* string)
     return s;
 }
 
+char strAt(String* string, size_t index)
+{
+    if (string->size > index)
+        return string->str[index];
+    exit(EXIT_FAILURE);
+}
+
 int string_push_back(String* str, char c)
 {
     if (str->size == str->capacity) {
-        String* temp = string_copy(str);
-        if (temp == NULL)
+        char* temp = str->str;
+        str->str = realloc(str->str, (str->capacity * 2) * sizeof(char));
+        if (str->str == NULL) {
+            free(temp);
             return -1;
-        string_free(str);
-        *str = *string_new(temp->capacity * 2);
-        if (str == NULL)
-            return -1;
-        memcpy(str->str, temp->str, temp->size * sizeof(char));
-        str->size = temp->size;
-        string_free(temp);
+        }
+        str->capacity *= 2;
     }
 
-    str->str[str->size++] = c;
+    str->str[str->size] = c;
+    str->size++;
     return 0;
 }

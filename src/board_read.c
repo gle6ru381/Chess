@@ -1,27 +1,44 @@
 #include "board_read.h"
 
-Map board_read()
+Pair board_read()
 {
-    Map map = {string_new(5), string_new(5)};
-    String* first = map.first;
-    String* second = map.second;
+    Pair pair;
+    String* first = string_new(5);
+    if (!first)
+        exit(EXIT_FAILURE);
+    String* second = string_new(5);
+    if (!second)
+        exit(EXIT_FAILURE);
     String* buff = string_new(10);
+    if (!buff)
+        exit(EXIT_FAILURE);
     char c;
-    while ((c = getchar()) != '\n') {
-        string_push_back(buff, c);
+    while ((c = getchar()) != ' ' && c != '\n') {
+        if ((string_push_back(buff, c)) == -1)
+            exit(EXIT_FAILURE);
     }
-    string_push_back(buff, '\0');
+    if ((string_push_back(buff, '\0')) == -1)
+        exit(EXIT_FAILURE);
     int i = 0;
-    for (; buff->str[i] != ' ' && buff->str[i] != '-'; i++) {
-        string_push_back(first, buff->str[i]);
+    while (strAt(buff, i) != ' ' && strAt(buff, i) != '-') {
+        if ((string_push_back(first, strAt(buff, i))) == -1)
+            exit(EXIT_FAILURE);
+        i++;
     }
-    string_push_back(first, '\0');
+    if ((string_push_back(first, '\0')) == -1)
+        exit(EXIT_FAILURE);
     i++;
-    for (; buff->str[i] != '\0'; i++) {
-        string_push_back(second, buff->str[i]);
+    while (strAt(buff, i) != '\0') {
+        if ((string_push_back(second, strAt(buff, i))) == -1)
+            exit(EXIT_FAILURE);
+        i++;
     }
-    string_push_back(second, '\0');
+    if ((string_push_back(second, '\0')) == -1)
+        exit(EXIT_FAILURE);
+
+    pair.first = first;
+    pair.second = second;
 
     string_free(buff);
-    return map;
+    return pair;
 }
