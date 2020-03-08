@@ -44,11 +44,13 @@ int main()
         }
     }
 
-    Map map = board_read();
+    Pair whiteMove = board_read();
+    Pair blackMove = board_read();
 
-    printf("%s-%s\n", map.first->str, map.second->str);
+    printf("%s-%s\n", whiteMove.first->str, blackMove.second->str);
 
-    map_free(map);
+    pair_free(whiteMove);
+    pair_free(blackMove);
 
     board_print(board);
     return 0;

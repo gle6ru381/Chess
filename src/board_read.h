@@ -1,4 +1,4 @@
 #pragma once
 #include "board.h"
 
-Map board_read();
+Pair board_read();

@@ -1,8 +1,8 @@
 #include "board_read.h"
 
-Map board_read()
+Pair board_read()
 {
-    Map map;
+    Pair pair;
     String* first = string_new(5);
     if (!first)
         exit(EXIT_FAILURE);
@@ -13,30 +13,32 @@ Map board_read()
     if (!buff)
         exit(EXIT_FAILURE);
     char c;
-    while ((c = getchar()) != '\n') {
+    while ((c = getchar()) != ' ' && c != '\n') {
         if ((string_push_back(buff, c)) == -1)
             exit(EXIT_FAILURE);
     }
     if ((string_push_back(buff, '\0')) == -1)
         exit(EXIT_FAILURE);
     int i = 0;
-    for (; buff->str[i] != ' ' && buff->str[i] != '-'; i++) {
-        if ((string_push_back(first, buff->str[i])) == -1)
+    while (strAt(buff, i) != ' ' && strAt(buff, i) != '-') {
+        if ((string_push_back(first, strAt(buff, i))) == -1)
             exit(EXIT_FAILURE);
+        i++;
     }
     if ((string_push_back(first, '\0')) == -1)
         exit(EXIT_FAILURE);
     i++;
-    for (; buff->str[i] != '\0'; i++) {
-        if ((string_push_back(second, buff->str[i])) == -1)
+    while (strAt(buff, i) != '\0') {
+        if ((string_push_back(second, strAt(buff, i))) == -1)
             exit(EXIT_FAILURE);
+        i++;
     }
     if ((string_push_back(second, '\0')) == -1)
         exit(EXIT_FAILURE);
 
-    map.first = first;
-    map.second = second;
+    pair.first = first;
+    pair.second = second;
 
     string_free(buff);
-    return map;
+    return pair;
 }

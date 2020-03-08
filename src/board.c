@@ -1,9 +1,9 @@
 #include "board.h"
 
-void map_free(Map map)
+void pair_free(Pair pair)
 {
-    string_free(map.first);
-    string_free(map.second);
+    string_free(pair.first);
+    string_free(pair.second);
 }
 
 String* string_new(size_t size)
@@ -39,12 +39,22 @@ String* string_copy(const String* string)
     return s;
 }
 
+char strAt(String* string, size_t index)
+{
+    if (string->size > index)
+        return string->str[index];
+    exit(EXIT_FAILURE);
+}
+
 int string_push_back(String* str, char c)
 {
     if (str->size == str->capacity) {
+        char* temp = str->str;
         str->str = realloc(str->str, (str->capacity * 2) * sizeof(char));
-        if (str->str == NULL)
+        if (str->str == NULL) {
+            free(temp);
             return -1;
+        }
         str->capacity *= 2;
     }
 
