@@ -20,13 +20,15 @@ Pair board_read()
     if ((string_push_back(buff, '\0')) == -1)
         exit(EXIT_FAILURE);
     int i = 0;
-    while (strAt(buff, i) != ' ' && strAt(buff, i) != '-') {
+    while (strAt(buff, i) != ' ' && strAt(buff, i) != '-'
+           && strAt(buff, i) != 'x') {
         if ((string_push_back(first, strAt(buff, i))) == -1)
             exit(EXIT_FAILURE);
         i++;
     }
     if ((string_push_back(first, '\0')) == -1)
         exit(EXIT_FAILURE);
+    pair.separator = strAt(buff, i);
     i++;
     while (strAt(buff, i) != '\0') {
         if ((string_push_back(second, strAt(buff, i))) == -1)

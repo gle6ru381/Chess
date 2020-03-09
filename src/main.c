@@ -44,14 +44,18 @@ int main()
         }
     }
 
-    Pair whiteMove = board_read();
-    Pair blackMove = board_read();
+    int i = 1;
+    while (true) {
+        printf("%d. ", i++);
+        Pair whiteMove = board_read();
+        Pair blackMove = board_read();
 
-    printf("%s-%s\n", whiteMove.first->str, blackMove.second->str);
+        printf("%c\n", whiteMove.separator);
 
-    pair_free(whiteMove);
-    pair_free(blackMove);
+        pair_free(whiteMove);
+        pair_free(blackMove);
 
-    board_print(board);
+        board_print(board);
+    }
     return 0;
 }

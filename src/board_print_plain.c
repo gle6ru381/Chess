@@ -2,13 +2,21 @@
 
 void board_print(Figure board[SIZE][SIZE])
 {
-    for (int i = 0; i < SIZE; i++) {
+    for (int i = SIZE - 1; i >= 0; i--) {
+        printf("%d|", SIZE - i);
         for (int j = 0; j < SIZE; j++) {
             if (board[i][j].side == white)
-                printf("%c", board[i][j].name);
+                printf("%2c", board[i][j].name);
             else
-                printf("%c", toupper(board[i][j].name));
+                printf("%2c", toupper(board[i][j].name));
         }
         printf("\n");
     }
+
+    printf("  ");
+    char c = 'a';
+    for (int i = 0; i < SIZE; i++) {
+        printf("%2c", c++);
+    }
+    printf("\n");
 }

@@ -1,4 +1,5 @@
 #pragma once
+#include <ctype.h>
 #include <malloc.h>
 #include <stdbool.h>
 #include <stdio.h>
@@ -24,6 +25,7 @@ typedef struct {
 typedef struct {
     String* first;
     String* second;
+    char separator;
 } Pair;
 
 String* string_new(size_t);
@@ -32,3 +34,4 @@ String* string_copy(const String*);
 char strAt(String*, size_t);
 void string_free(String*);
 void pair_free(Pair);
+bool move(Pair, Side);
