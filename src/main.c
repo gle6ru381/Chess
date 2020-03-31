@@ -5,14 +5,14 @@
 int main()
 {
     Figure board[SIZE][SIZE]
-            = {{{'r'}, {'n'}, {'b'}, {'q'}, {'k'}, {'b'}, {'n'}, {'r'}},
+            = {{{'R'}, {'N'}, {'B'}, {'Q'}, {'K'}, {'B'}, {'N'}, {'R'}},
                {},
                {},
                {},
                {},
                {},
                {},
-               {{'r'}, {'n'}, {'b'}, {'q'}, {'k'}, {'b'}, {'n'}, {'r'}}};
+               {{'R'}, {'N'}, {'B'}, {'Q'}, {'K'}, {'B'}, {'N'}, {'R'}}};
 
     for (int i = 0; i < 2; i++) {
         for (int j = 0; j < SIZE; j++) {
@@ -29,11 +29,11 @@ int main()
     }
 
     for (int i = 0; i < SIZE; i++) {
-        board[SIZE - 2][i].name = 'p';
+        board[SIZE - 2][i].name = 'P';
     }
 
     for (int i = 0; i < SIZE; i++) {
-        board[1][i].name = 'p';
+        board[1][i].name = 'P';
     }
 
     for (int i = 2; i <= 5; i++) {
@@ -50,7 +50,15 @@ int main()
         Pair whiteMove = board_read();
         Pair blackMove = board_read();
 
-        printf("%c\n", whiteMove.separator);
+        bool one = move(board, whiteMove, white);
+        bool two = false;
+        if (one)
+            two = move(board, blackMove, black);
+        if (!two)
+            return -1;
+
+        printf("%d\n", one);
+        printf("%d\n", two);
 
         pair_free(whiteMove);
         pair_free(blackMove);

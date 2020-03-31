@@ -34,4 +34,5 @@ String* string_copy(const String*);
 char strAt(String*, size_t);
 void string_free(String*);
 void pair_free(Pair);
-bool move(Pair, Side);
+void swap(Figure*, Figure*);
+bool move(Figure board[SIZE][SIZE], Pair, Side);

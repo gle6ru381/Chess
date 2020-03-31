@@ -63,13 +63,20 @@ int string_push_back(String* str, char c)
     return 0;
 }
 
-bool move(Pair pair, Side side)
+void swap(Figure* first, Figure* second)
+{
+    Figure temp = *first;
+    *first = *second;
+    *second = temp;
+}
+
+bool move(Figure board[SIZE][SIZE], Pair pair, Side side)
 {
     char typeFigure = '\0', totalFigure = '\0';
     bool enPassant = false, shah = false, mate = false;
-    if (isupper(strAt(pair.first, 0)){
+    if (isupper(strAt(pair.first, 0))) {
         if (strAt(pair.first, 0) >= 'A' && strAt(pair.first, 0) <= 'H') {
-            pair.first[0] = tolower(pair.first[0]);
+            pair.first->str[0] = tolower(pair.first->str[0]);
         } else if (
                 (strAt(pair.first, 0) & ('K' | 'Q' | 'R' | 'B' | 'N' | 'P'))
                 == strAt(pair.first, 0)) {
@@ -79,10 +86,14 @@ bool move(Pair pair, Side side)
         }
     }
     size_t i;
-    typeFigure == '\0' ? i = 0: i = 1;
+    if (typeFigure == '\0')
+        i = 0;
+    else
+        i = 1;
+
     char bCh, bNum, eCh, eNum;
     size_t iCh, iNum;
-    while (i < pair.first.size){
+    while (i < pair.first->size) {
         if (strAt(pair.first, i) >= 'a' && strAt(pair.first, i) <= 'h') {
             bCh = strAt(pair.first, i);
             iCh = i;
@@ -95,20 +106,24 @@ bool move(Pair pair, Side side)
     }
     if (iCh > iNum)
         return false;
+    if (typeFigure != '\0'
+        && toupper(typeFigure) != board[bNum - '1'][bCh - 'a'].name)
+        return false;
 
-    while (i < pair.second.size){
+    i = 0;
+    while (i < pair.second->size) {
         if (strAt(pair.second, i) >= 'a' && strAt(pair.second, i) <= 'h') {
             if (strAt(pair.second, i + 1) == '.')
                 continue;
             eCh = strAt(pair.second, i);
             iCh = i;
         }
-        if (strAr(pair.second, i) >= '1' && strAt(pair.first, i) <= '9') {
+        if (strAt(pair.second, i) >= '1' && strAt(pair.first, i) <= '9') {
             eNum = strAt(pair.second, i);
             iNum = i;
         }
-        if (strAt(pair.second, i)
-            & ('K' | 'Q' | 'R' | 'B' | 'N' | 'P') == strAt(pair.second, i)) {
+        if ((strAt(pair.second, i) & ('K' | 'Q' | 'R' | 'B' | 'N' | 'P'))
+            == strAt(pair.second, i)) {
             if (i < iCh && i < iNum)
                 return false;
             totalFigure = strAt(pair.second, i);
@@ -117,28 +132,52 @@ bool move(Pair pair, Side side)
     }
     if (iCh > iNum)
         return false;
+    if (board[eNum - '1'][eCh - 'a'].name == ' ' && pair.separator == 'x')
+        return false;
+    if (eNum - bNum > 2)
+        return false;
 
-    char* tempPtr = strstr(pair.second.str, "e.p.");
-    if (tempPtr != NULL){
-        if (tempPtr < (pair.second.str + iNum))
+    char* tempPtr = strstr(pair.second->str, "e.p.");
+    if (tempPtr != NULL) {
+        if (tempPtr > (pair.second->str + iNum))
             enPassant = true;
         else
             return false;
     }
 
-    tempPtr = strstr(pair.second.str, "+");
-    if (tempPtr != NULL){
-        if (tempPtr < (pair.second.str + iNum))
+    if (enPassant) {
+        swap(&board[bNum - '1'][bCh - 'a'], &board[eNum - '1'][eCh - 'a']);
+    }
+
+    tempPtr = strstr(pair.second->str, "+");
+    if (tempPtr != NULL) {
+        if (tempPtr > (pair.second->str + iNum))
             shah = true;
         else
             return false;
     }
 
-    tempPtr = strstr(pair.second.str, "#");
-    if (tempPtr != NULL){
-        if (tempPtr < (pair.second.str + iNum))
+    if (shah) {
+        swap(&board[bNum - '1'][bCh - 'a'], &board[eNum - '1'][eCh - 'a']);
+    }
+
+    tempPtr = strstr(pair.second->str, "#");
+    if (tempPtr != NULL) {
+        if (tempPtr > (pair.second->str + iNum))
             mate = true;
         else
             return false;
     }
+
+    if (mate) {
+        swap(&board[bNum - '1'][bCh - 'a'], &board[eNum - '1'][eCh - 'a']);
+    }
+
+    if (totalFigure) {
+        board[eNum - '1'][bCh - 'a'].name = totalFigure;
+    }
+
+    swap(&board[bNum - '1'][bCh - 'a'], &board[eNum - '1'][eCh - 'a']);
+
+    return true;
 }
