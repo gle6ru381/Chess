@@ -141,14 +141,21 @@ bool move(Figure board[SIZE][SIZE], Pair pair, Side side)
 
     int range = eNum - bNum;
     Figure mainFigure = *boardAt(board, bNum, bCh);
-    if (abs(range) > 2 && mainFigure.name == 'P')
+    if (mainFigure.name == ' ')
         return false;
-    if (mainFigure.name == 'P' && !mainFigure.first_move && abs(range) > 1)
-        return false;
+    if (abs(range) < 3 && mainFigure.name == 'P') {
+        if (!mainFigure.first_move && abs(range) > 1)
+            return false;
+        if (mainFigure.side == white && range < 0)
+            return false;
+        if (mainFigure.side == black && range > 0)
+            return false;
+    }
     if (totalFigure) {
         boardAt(board, bNum, bCh)->name = totalFigure;
     }
 
+    boardAt(board, bNum, bCh)->first_move = false;
     swap(boardAt(board, bNum, bCh), boardAt(board, eNum, eCh));
 
     return true;
