@@ -36,3 +36,4 @@ void string_free(String*);
 void pair_free(Pair);
 void swap(Figure*, Figure*);
 bool move(Figure board[SIZE][SIZE], Pair, Side);
+Figure boardAt(Figure board[SIZE][SIZE], char, char);

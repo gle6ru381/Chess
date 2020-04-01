@@ -70,10 +70,14 @@ void swap(Figure* first, Figure* second)
     *second = temp;
 }
 
+Figure boardAt(Figure board[SIZE][SIZE], char row, char col)
+{
+    return board[row - '1'][col - 'a'];
+}
+
 bool move(Figure board[SIZE][SIZE], Pair pair, Side side)
 {
     char typeFigure = '\0', totalFigure = '\0';
-    bool enPassant = false, shah = false, mate = false;
     if (isupper(strAt(pair.first, 0))) {
         if (strAt(pair.first, 0) >= 'A' && strAt(pair.first, 0) <= 'H') {
             pair.first->str[0] = tolower(pair.first->str[0]);
@@ -134,48 +138,14 @@ bool move(Figure board[SIZE][SIZE], Pair pair, Side side)
         return false;
     if (board[eNum - '1'][eCh - 'a'].name == ' ' && pair.separator == 'x')
         return false;
-    if (eNum - bNum > 2)
+    int range = eNum - bNum;
+    if (range > 2 && board)
         return false;
+    if (eNu)
 
-    char* tempPtr = strstr(pair.second->str, "e.p.");
-    if (tempPtr != NULL) {
-        if (tempPtr > (pair.second->str + iNum))
-            enPassant = true;
-        else
-            return false;
-    }
-
-    if (enPassant) {
-        swap(&board[bNum - '1'][bCh - 'a'], &board[eNum - '1'][eCh - 'a']);
-    }
-
-    tempPtr = strstr(pair.second->str, "+");
-    if (tempPtr != NULL) {
-        if (tempPtr > (pair.second->str + iNum))
-            shah = true;
-        else
-            return false;
-    }
-
-    if (shah) {
-        swap(&board[bNum - '1'][bCh - 'a'], &board[eNum - '1'][eCh - 'a']);
-    }
-
-    tempPtr = strstr(pair.second->str, "#");
-    if (tempPtr != NULL) {
-        if (tempPtr > (pair.second->str + iNum))
-            mate = true;
-        else
-            return false;
-    }
-
-    if (mate) {
-        swap(&board[bNum - '1'][bCh - 'a'], &board[eNum - '1'][eCh - 'a']);
-    }
-
-    if (totalFigure) {
-        board[eNum - '1'][bCh - 'a'].name = totalFigure;
-    }
+        if (totalFigure) {
+            board[eNum - '1'][bCh - 'a'].name = totalFigure;
+        }
 
     swap(&board[bNum - '1'][bCh - 'a'], &board[eNum - '1'][eCh - 'a']);
 
