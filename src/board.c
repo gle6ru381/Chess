@@ -70,9 +70,9 @@ void swap(Figure* first, Figure* second)
     *second = temp;
 }
 
-Figure boardAt(Figure board[SIZE][SIZE], char row, char col)
+Figure* boardAt(Figure board[SIZE][SIZE], char row, char col)
 {
-    return board[row - '1'][col - 'a'];
+    return &board[row - '1'][col - 'a'];
 }
 
 bool move(Figure board[SIZE][SIZE], Pair pair, Side side)
@@ -138,16 +138,18 @@ bool move(Figure board[SIZE][SIZE], Pair pair, Side side)
         return false;
     if (board[eNum - '1'][eCh - 'a'].name == ' ' && pair.separator == 'x')
         return false;
+
     int range = eNum - bNum;
-    if (range > 2 && board)
+    Figure mainFigure = *boardAt(board, bNum, bCh);
+    if (abs(range) > 2 && mainFigure.name == 'P')
         return false;
-    if (eNu)
+    if (mainFigure.name == 'P' && !mainFigure.first_move && abs(range) > 1)
+        return false;
+    if (totalFigure) {
+        boardAt(board, bNum, bCh)->name = totalFigure;
+    }
 
-        if (totalFigure) {
-            board[eNum - '1'][bCh - 'a'].name = totalFigure;
-        }
-
-    swap(&board[bNum - '1'][bCh - 'a'], &board[eNum - '1'][eCh - 'a']);
+    swap(boardAt(board, bNum, bCh), boardAt(board, eNum, eCh));
 
     return true;
 }
