@@ -142,27 +142,47 @@ bool move(Figure board[SIZE][SIZE], Pair pair, Side side)
     }
     if (iCh > iNum)
         return false;
-    if (boardAt(board, eNum, eCh)->name == ' ' && pair.separator == 'x')
+    int rangeNum = eNum - bNum;
+    int rangeCh = eCh - bCh;
+    Figure* mainFigure = boardAt(board, bNum, bCh);
+    Figure* endFigure = boardAt(board, eNum, eCh);
+    if (mainFigure->name == ' ')
         return false;
+    if (mainFigure->name == 'P') {
+        if (mainFigure->side == white && rangeNum < 0)
+            return false;
+        if (mainFigure->side == black && rangeNum > 0)
+            return false;
+        if (pair.separator == '-') {
+            if (rangeCh != 0)
+                return false;
+            if (endFigure->name != ' ')
+                return false;
+            if (abs(rangeNum) < 3) {
+                if (!mainFigure->first_move && abs(rangeNum) > 1)
+                    return false;
+            }
+            if (totalFigure) {
+                boardAt(board, bNum, bCh)->name = totalFigure;
+            }
 
-    int range = eNum - bNum;
-    Figure mainFigure = *boardAt(board, bNum, bCh);
-    if (mainFigure.name == ' ')
-        return false;
-    if (abs(range) < 3 && mainFigure.name == 'P') {
-        if (!mainFigure.first_move && abs(range) > 1)
-            return false;
-        if (mainFigure.side == white && range < 0)
-            return false;
-        if (mainFigure.side == black && range > 0)
-            return false;
+            boardAt(board, bNum, bCh)->first_move = false;
+            swap(boardAt(board, bNum, bCh), boardAt(board, eNum, eCh));
+        } else if (pair.separator == 'x') {
+            if (abs(rangeNum) > 1)
+                return false;
+            if (endFigure->name == ' ')
+                return false;
+            if (endFigure->side == side)
+                return false;
+            if (rangeCh == 0 && abs(rangeCh) > 1)
+                return false;
+            endFigure->first_move = false;
+            endFigure->name = mainFigure->name;
+            endFigure->side = mainFigure->side;
+            mainFigure->side = empty;
+            mainFigure->name = ' ';
+        }
     }
-    if (totalFigure) {
-        boardAt(board, bNum, bCh)->name = totalFigure;
-    }
-
-    boardAt(board, bNum, bCh)->first_move = false;
-    swap(boardAt(board, bNum, bCh), boardAt(board, eNum, eCh));
-
     return true;
 }
