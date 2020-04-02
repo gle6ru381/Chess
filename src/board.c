@@ -70,6 +70,15 @@ void swap(Figure* first, Figure* second)
     *second = temp;
 }
 
+bool chInStr(char c, const char* string)
+{
+    for (int i = 0; i < strlen(string); i++) {
+        if (c == string[i])
+            return true;
+    }
+    return false;
+}
+
 Figure* boardAt(Figure board[SIZE][SIZE], char row, char col)
 {
     return &board[row - '1'][col - 'a'];
@@ -81,9 +90,7 @@ bool move(Figure board[SIZE][SIZE], Pair pair, Side side)
     if (isupper(strAt(pair.first, 0))) {
         if (strAt(pair.first, 0) >= 'A' && strAt(pair.first, 0) <= 'H') {
             pair.first->str[0] = tolower(pair.first->str[0]);
-        } else if (
-                (strAt(pair.first, 0) & ('K' | 'Q' | 'R' | 'B' | 'N' | 'P'))
-                == strAt(pair.first, 0)) {
+        } else if (chInStr(strAt(pair.first, 0), "QKPBNR")) {
             typeFigure = strAt(pair.first, 0);
         } else {
             return false;
@@ -126,8 +133,7 @@ bool move(Figure board[SIZE][SIZE], Pair pair, Side side)
             eNum = strAt(pair.second, i);
             iNum = i;
         }
-        if ((strAt(pair.second, i) & ('K' | 'Q' | 'R' | 'B' | 'N' | 'P'))
-            == strAt(pair.second, i)) {
+        if (chInStr(strAt(pair.second, i), "QKPNBR")) {
             if (i < iCh && i < iNum)
                 return false;
             totalFigure = strAt(pair.second, i);
@@ -136,7 +142,7 @@ bool move(Figure board[SIZE][SIZE], Pair pair, Side side)
     }
     if (iCh > iNum)
         return false;
-    if (board[eNum - '1'][eCh - 'a'].name == ' ' && pair.separator == 'x')
+    if (boardAt(board, eNum, eCh)->name == ' ' && pair.separator == 'x')
         return false;
 
     int range = eNum - bNum;
